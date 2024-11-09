@@ -1,0 +1,15 @@
+{
+  "name": "devconnect-backend",
+  "version": "1.0.0",
+  "description": "Node.js, JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node src/app.js",
+    "dev" : "nodemon src/app.js"
+  },
+  "author": "Ritika Gutgutia",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
