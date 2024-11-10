@@ -1,48 +1,34 @@
 const express = require("express");
 const app = express();
 
-// app.use("/test", (req, res) => {
-//   res.send("Hello from the server, testingggg modee!");
-// });
-
-// app.use("/", (req, res) => {
-//   res.send("Hello from the server");
-// });
-
-// app.use("/test/2", (req, res) => {
-//   res.send("Abracadabra");
-// });
-
-// app.use((req, res) => {
-//   res.send("Hello from the server");
-// });
-
-// app.use("/user", (req, res) => {
-//   res.send("HAHAHAHAHHAAHAAAHHAHAHAHAHAHAHAHAAAAAAAAAAAA");
-// });
-
 app.get("/user", (req, res) => {
+  console.log(req.query);
   res.send({ firstName: "Ritika", lastName: "Gutgutia" });
 });
 
-app.post("/user", (req, res) => {
-  console.log("Data saved successfully to the DB");
-  res.send("Data saved successfully to the DB");
+app.get("/user/:userId", (req, res) => {
+  console.log(req.params);
+  res.send({ firstName: "Ritika", lastName: "Gutgutia" });
 });
 
-app.put("/user", (req, res) => {
-  console.log("Data successfully updated");
-  res.send("Data updated successfully to the DB");
+app.get("/a(bd)?c", (req, res) => {
+  res.send("Hello hello hello");
 });
 
-app.patch("/user", (req, res) => {
-  console.log("Data updated successfully to the DB");
-  res.send("Data updated successfully to the DB");
+app.get("/a*c", (req, res) => {
+  res.send("Hello hello hello");
 });
 
-app.delete("/user", (req, res) => {
-  console.log("Data deleted successfully from the DB");
-  res.send("Data deleted successfully from the DB");
+app.get("/a+c", (req, res) => {
+  res.send("Hello hello hello");
+});
+
+app.get(/a/, (req, res) => {
+  res.send("Hello hello hello regex");
+});
+
+app.get(/.*fly$/, (req, res) => {
+  res.send("Hello hello hello regex");
 });
 
 app.listen(3000, () => {
