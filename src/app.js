@@ -1,36 +1,21 @@
 const express = require("express");
 const app = express();
+const { adminAuth, userAuth } = require("./middlewares/auth.js");
 
-app.get("/user", (req, res) => {
-  console.log(req.query);
-  res.send({ firstName: "Ritika", lastName: "Gutgutia" });
+app.get("/admin/getAllData", adminAuth, (req, res) => {
+  res.send("Get all data");
 });
 
-app.get("/user/:userId", (req, res) => {
-  console.log(req.params);
-  res.send({ firstName: "Ritika", lastName: "Gutgutia" });
+app.post("/user/login", (req, res) => {
+  res.send("User logged in successfully!");
 });
 
-app.get("/a(bd)?c", (req, res) => {
-  res.send("Hello hello hello");
+app.get("/user/order-details", userAuth, (req, res) => {
+  res.send("Order details sent successfully!");
 });
-
-app.get("/a*c", (req, res) => {
-  res.send("Hello hello hello");
+app.post("/admin/deleteUser", adminAuth, (req, res) => {
+  res.send("User deleted successfully!");
 });
-
-app.get("/a+c", (req, res) => {
-  res.send("Hello hello hello");
-});
-
-app.get(/a/, (req, res) => {
-  res.send("Hello hello hello regex");
-});
-
-app.get(/.*fly$/, (req, res) => {
-  res.send("Hello hello hello regex");
-});
-
 app.listen(3000, () => {
   console.log("Server is successfully listening on port 3000...");
 });
