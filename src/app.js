@@ -1,21 +1,21 @@
 const express = require("express");
 const app = express();
-const { adminAuth, userAuth } = require("./middlewares/auth.js");
 
-app.get("/admin/getAllData", adminAuth, (req, res) => {
-  res.send("Get all data");
+app.get("/user/details", (req, res) => {
+  try {
+    throw new Error("Some error encountered");
+  } catch (err) {
+    console.log(err.message, "Error");
+    res.status(500).send("Error encountered");
+  }
 });
 
-app.post("/user/login", (req, res) => {
-  res.send("User logged in successfully!");
-});
-
-app.get("/user/order-details", userAuth, (req, res) => {
-  res.send("Order details sent successfully!");
-});
-app.post("/admin/deleteUser", adminAuth, (req, res) => {
-  res.send("User deleted successfully!");
-});
+// app.use("/", (err, req, res, next) => {
+//   if (err) {
+//     console.log(err);
+//     res.send("Error, please contact the support team!");
+//   }
+// });
 app.listen(3000, () => {
   console.log("Server is successfully listening on port 3000...");
 });
