@@ -1,21 +1,31 @@
 const express = require("express");
 const app = express();
+const connectDB = require("./config/database");
+const User = require("./models/user");
 
-app.get("/user/details", (req, res) => {
+app.post("/signup", async (req, res) => {
+  const user = new User({
+    firstName: "Ritika",
+    lastName: "Gutgutia",
+    emailId: "ritikagutgutia@email.com",
+    password: "1234",
+    age: 20,
+    gender: "female",
+  });
   try {
-    throw new Error("Some error encountered");
+    await user.save();
+    res.send("User added successfully!");
   } catch (err) {
-    console.log(err.message, "Error");
-    res.status(500).send("Error encountered");
+    res.status(400).send("Error saving the user " + err.message);
   }
 });
-
-// app.use("/", (err, req, res, next) => {
-//   if (err) {
-//     console.log(err);
-//     res.send("Error, please contact the support team!");
-//   }
-// });
-app.listen(3000, () => {
-  console.log("Server is successfully listening on port 3000...");
-});
+connectDB()
+  .then(() => {
+    console.log("Cluster connection established...");
+    app.listen(3000, () => {
+      console.log("Server is successfully listening on port 3000...");
+    });
+  })
+  .catch((err) => {
+    console.log("Error in connecting to the cluster");
+  });
