@@ -5,25 +5,20 @@ const User = require("./models/user");
 
 app.use(express.json());
 app.post("/signup", async (req, res) => {
-  const user = new User(req.body);
-  await user.save();
-  console.log(req.body);
-  res.send("Successfully logging the req!");
+  try {
+    const data = req.body;
+    if (data?.skills?.length > 10) {
+      console.log("Length issue");
+      throw new Error("User cannot be signed up!");
+    }
+    const user = new User(data);
+    await user.save();
+    console.log(req.body);
+    res.send("Successfully logging the req!");
+  } catch (err) {
+    res.send("Error in signing the user " + err.message);
+  }
 });
-
-// app.get("/user", async (req, res) => {
-//   try {
-//     const userEmail = req.body.emailId;
-//     const user = await User.findOne({ emailId: userEmail });
-//     if (!user) {
-//       res.status(404).send("User not found!");
-//     } else {
-//       res.send(user);
-//     }
-//   } catch (err) {
-//     res.status(400).send("Something went wrong");
-//   }
-// });
 
 app.get("/feed", async (req, res) => {
   try {
@@ -56,15 +51,27 @@ app.delete("/user", async (req, res) => {
   }
 });
 
-app.patch("/user", async (req, res) => {
-  const userEmail = req.body.emailId;
+app.patch("/user/:userId", async (req, res) => {
+  const userId = req.params.userId;
   const data = req.body;
 
   try {
-    await User.findOneAndUpdate({ emailId: userEmail }, data);
+    const ALLOWED_UPDATES = ["age", "photoUrl", "gender", "about", "skills"];
+
+    const isAllowed = Object.keys(data).every((k) => {
+      return ALLOWED_UPDATES.includes(k);
+    });
+
+    if (!isAllowed || data?.skills.length > 10) {
+      throw new Error("Update cannot be made");
+    }
+    await User.findOneAndUpdate({ _id: userId }, data, {
+      returnDocument: "after",
+      runValidators: true,
+    });
     res.send("User updated successfully!");
   } catch (err) {
-    res.send("Something went wrong!");
+    res.send("Something went wrong! " + err.message);
   }
 });
 connectDB()
@@ -75,5 +82,5 @@ connectDB()
     });
   })
   .catch((err) => {
-    console.log("Error in connecting to the cluster");
+    console.log("Error in connecting to the cluster " + err.message);
   });
