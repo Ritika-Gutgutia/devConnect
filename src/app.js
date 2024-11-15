@@ -2,25 +2,52 @@
 const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
+const { validateSignUpData, validateLoginData } = require("./utils/validation");
+const bcrypt = require("bcrypt");
 const User = require("./models/user");
 
 app.use(express.json());
 app.post("/signup", async (req, res) => {
   try {
-    const data = req.body;
-    if (data?.skills?.length > 10) {
-      console.log("Length issue");
-      throw new Error("User cannot be signed up!");
-    }
-    const user = new User(data);
+    validateSignUpData(req);
+    const { firstName, lastName, emailId, password } = req.body;
+    const hashPassword = await bcrypt.hash(password, 10);
+    console.log(hashPassword);
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: hashPassword,
+    });
     await user.save();
     console.log(req.body);
     res.send("Successfully logging the req!");
   } catch (err) {
-    res.send("Error in signing the user " + err.message);
+    res.send("ERROR : " + err.message);
   }
 });
 
+app.post("/login", async (req, res) => {
+  try {
+    validateLoginData(req);
+    const { emailId, password } = req.body;
+    const user = await User.findOne({ emailId: emailId });
+
+    if (user === null) {
+      throw new Error("Invalid credentials");
+    }
+
+    const hashPassword = user.password;
+    const match = await bcrypt.compare(password, hashPassword);
+    if (!match) {
+      throw new Error("Invalid credentials");
+    }
+
+    res.send("User logged in successfully!");
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
+  }
+});
 app.get("/feed", async (req, res) => {
   try {
     const users = await User.find({});
