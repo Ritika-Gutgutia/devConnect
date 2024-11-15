@@ -1,3 +1,4 @@
+//NEVER TRUST WHATEVER COMES FROM req.body
 const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
