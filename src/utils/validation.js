@@ -14,7 +14,32 @@ const validateLoginData = (req) => {
   }
 };
 
+const validateProfileData = (req) => {
+  try {
+    const data = req.body;
+    const allowedEditFields = [
+      "firstName",
+      "lastName",
+      "age",
+      "gender",
+      "photoUrl",
+      "about",
+      "skills",
+    ];
+    const isAllowed = Object.keys(data).every((k) => {
+      return allowedEditFields.includes(k);
+    });
+
+    if (!isAllowed) {
+      throw new Error("Invalid Edit request");
+    }
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
+  }
+};
+
 module.exports = {
   validateSignUpData,
   validateLoginData,
+  validateProfileData,
 };
