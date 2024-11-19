@@ -21,7 +21,7 @@ router.post("/signup", async (req, res) => {
     await user.save();
     res.send("Successfully logging the req!");
   } catch (err) {
-    res.send("ERROR : " + err.message);
+    res.send("ERROR: " + err.message);
   }
 });
 
@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
     });
     res.send("User logged in successfully!");
   } catch (err) {
-    res.status(400).send("ERROR : " + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
