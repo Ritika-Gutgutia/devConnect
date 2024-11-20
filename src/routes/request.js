@@ -11,16 +11,13 @@ router.post("/send/:status/:toUserId", userAuth, async (req, res) => {
     const status = req.params.status;
 
     const allowedStatusFields = ["interested", "ignored"];
+
     if (!allowedStatusFields.includes(status)) {
       return res.status(400).json({
         message: "Invalid connection request",
       });
     }
-    if (fromUserId === toUserId) {
-      return res.status(404).json({
-        message: "Invalid connection request",
-      });
-    }
+
     const toUserIdExists = await User.findById(toUserId);
 
     if (!toUserIdExists) {
@@ -60,6 +57,43 @@ router.post("/send/:status/:toUserId", userAuth, async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+});
+
+router.post("/review/:status/:requestId", userAuth, async (req, res) => {
+  try {
+    const requestId = req.params.requestId;
+    const toUserId = req.user._id;
+    const status = req.params.status;
+    const allowedStatusFields = ["accepted", "rejected"];
+
+    if (!allowedStatusFields.includes(status)) {
+      return res.status(400).json({
+        message: "Invalid Connection review request",
+      });
+    }
+
+    const connectionRequestData = await ConnectionRequest.findOne({
+      _id: requestId,
+      toUserId,
+      status: "interested",
+    });
+
+    if (!connectionRequestData) {
+      return res.status(404).json({
+        message: "Invalid Connection review request",
+      });
+    }
+
+    connectionRequestData.status = status;
+    await connectionRequestData.save();
+
+    res.json({
+      message: `Connection request ${status}`,
+      connectionRequestData,
+    });
+  } catch (err) {
+    res.status(400).send(err);
   }
 });
 
