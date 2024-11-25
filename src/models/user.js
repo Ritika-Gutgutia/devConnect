@@ -54,6 +54,8 @@ const userSchema = new mongoose.Schema(
     },
     photoUrl: {
       type: String,
+      default:
+        "https://thumbs.dreamstime.com/b/default-avatar-profile-trendy-style-social-media-user-icon-187599373.jpg",
       validate(value) {
         if (!validator.isURL(value)) {
           throw new Error("Please enter a valid url");

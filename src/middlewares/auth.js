@@ -5,7 +5,7 @@ const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     if (!token) {
-      throw new Error("The token is not valid!!!!");
+      return res.status(401).send("Please login!");
     }
     const decodedMessage = jwt.verify(token, "RITIKA@DEV@DEVConnect@2012");
     const { _id } = decodedMessage;

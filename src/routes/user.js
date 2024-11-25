@@ -5,7 +5,7 @@ const { connection } = require("mongoose");
 const User = require("../models/user");
 const router = express.Router();
 
-const USER_SAFE_DATA = "firstName lastName gender age about skills";
+const USER_SAFE_DATA = "firstName lastName gender age about skills photoUrl";
 
 router.get("/connections", userAuth, async (req, res) => {
   try {

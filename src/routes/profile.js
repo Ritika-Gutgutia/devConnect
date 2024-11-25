@@ -21,7 +21,6 @@ router.patch("/edit", userAuth, async (req, res) => {
     Object.keys(data).forEach((key) => (user[key] = data[key]));
     // alt way for updating user : User.updateOne({_id : user._id}, data, {runValidators : true})
     await user.save();
-    console.log(user);
     res.json({
       message: `${user.firstName}'s profile updated successfully`,
       user,
