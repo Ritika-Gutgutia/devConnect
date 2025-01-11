@@ -54,7 +54,7 @@ router.get("/request/received", userAuth, async (req, res) => {
 
     res.json({
       message: `${loggedInUser.firstName}'s received connection requests`,
-      connectionRequestReceived,
+      data: connectionRequestReceived,
     });
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);

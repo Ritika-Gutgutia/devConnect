@@ -25,6 +25,7 @@ const validateProfileData = (req) => {
     "about",
     "skills",
   ];
+
   const isAllowed = Object.keys(data).every((k) => {
     return allowedEditFields.includes(k);
   });

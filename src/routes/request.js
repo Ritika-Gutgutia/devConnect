@@ -90,7 +90,7 @@ router.post("/review/:status/:requestId", userAuth, async (req, res) => {
 
     res.json({
       message: `Connection request ${status}`,
-      connectionRequestData,
+      data: connectionRequestData,
     });
   } catch (err) {
     res.status(400).send(err);

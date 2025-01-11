@@ -9,7 +9,7 @@ router.get("/view", userAuth, async (req, res) => {
     const user = req.user;
     res.send(user);
   } catch (err) {
-    res.status(400).send("ERROR: " + err.message);
+    res.status(400).send("ERROR: " + err.message
   }
 });
 
@@ -19,7 +19,6 @@ router.patch("/edit", userAuth, async (req, res) => {
     const data = req.body;
     const user = req.user;
     Object.keys(data).forEach((key) => (user[key] = data[key]));
-    // alt way for updating user : User.updateOne({_id : user._id}, data, {runValidators : true})
     await user.save();
     res.json({
       message: `${user.firstName}'s profile updated successfully`,
