@@ -18,8 +18,13 @@ router.post("/signup", async (req, res) => {
       emailId,
       password: hashPassword,
     });
-    await user.save();
-    res.send("Successfully logging the req!");
+    const savedUser = await user.save();
+    const token = await savedUser.getJWT();
+
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+    });
+    res.send({ message: "Successfully logging the req!", data: savedUser });
   } catch (err) {
     res.send("ERROR: " + err.message);
   }
