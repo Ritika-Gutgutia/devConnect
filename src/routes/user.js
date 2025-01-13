@@ -66,10 +66,10 @@ router.get("/feed", userAuth, async (req, res) => {
     const loggedInUser = req.user;
     const loggedInUserId = loggedInUser._id;
     const page = parseInt(req.query.page) || 1;
-    let limit = parseInt(req.query.limit) || 10;
+    let limit = parseInt(req.query.limit) || 100;
     const skipDocuments = (page - 1) * limit;
 
-    limit = limit > 50 ? 50 : limit;
+    limit = limit > 100 ? 100 : limit;
     const connectionRequest = await ConnectionRequest.find({
       $or: [
         {
